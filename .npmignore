@@ -1,0 +1,28 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# testing
+test/
+coverage/
+
+# source
+src/
+
+# build-tools
+.travis.yml
+.jenkins.yml
+.codeclimate.yml
+
+# linters
+.jscsrc
+.jshintrc
+.eslintrc*
+
+# editor-settings
+.idea
+.editorconfig
+
+# misc
+.babelrc
+.github
+*npm-debug.log
+*yarn-error.log
