@@ -11,6 +11,8 @@
 
 [![demo.png](https://thumbs.gfycat.com/BadMadAdmiralbutterfly-size_restricted.gif)](https://codesandbox.io/embed/y200pqy4pz?view=preview)
 
+<iframe src='https://gfycat.com/ifr/BadMadAdmiralbutterfly' frameborder='0' scrolling='no' width='2358' height='1558' allowfullscreen></iframe>
+
 Try out the [demo](https://codesandbox.io/embed/y200pqy4pz?view=preview)!
 
 ## Installation
