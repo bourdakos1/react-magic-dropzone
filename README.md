@@ -21,15 +21,15 @@ import MagicDropzone from 'react-magic-dropzone'
 ```
 
 ```jsx
-<div style={{}}>
-  <MagicDropzone
-    accept="image/jpeg, image/png, .jpg, .jpeg, .png"
-    onDrop={this.onDrop}
-   >
-    Drop some files on me!
-  </MagicDropzone>
-</div>
+<MagicDropzone
+  accept="image/jpeg, image/png, .jpg, .jpeg, .png"
+  onDrop={this.onDrop}
+>
+  Drop some files on me!
+</MagicDropzone>
 ```
+
+[![Edit jvorp575k9](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/jvorp575k9)
 
 ## License
 
