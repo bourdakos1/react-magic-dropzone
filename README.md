@@ -20,6 +20,17 @@ Import `MagicDropzone` in your React component:
 import MagicDropzone from 'react-magic-dropzone'
 ```
 
+```jsx
+<div style={{}}>
+  <MagicDropzone
+    accept="image/jpeg, image/png, .jpg, .jpeg, .png"
+    onDrop={this.onDrop}
+   >
+    Drop some files on me!
+  </MagicDropzone>
+</div>
+```
+
 ## License
 
 MIT
