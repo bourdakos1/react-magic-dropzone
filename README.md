@@ -10,7 +10,7 @@
 ## Demo
 
 <div align="center">
-  <a href="https://codesandbox.io/embed/y200pqy4pz?view=preview"><img src="/demo.gif" alt="demo.gif"></a>
+  <a href="https://codesandbox.io/embed/y200pqy4pz?view=preview"><img src="/screenshots/demo.gif" alt="demo.gif"></a>
 </div>
 
 Try out the [demo](https://codesandbox.io/embed/y200pqy4pz?view=preview)!
