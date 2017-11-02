@@ -5,8 +5,6 @@
 [![npm-version](https://img.shields.io/npm/v/react-magic-dropzone.svg)](https://www.npmjs.com/package/react-magic-dropzone)
 [![npm-downloads](https://img.shields.io/npm/dm/react-magic-dropzone.svg)](https://www.npmjs.com/package/react-magic-dropzone)
 
-## Demo
-
 <div align="center">
   <a href="https://codesandbox.io/embed/y200pqy4pz?view=preview"><img src="/screenshots/demo.gif" alt="demo.gif"></a>
 </div>
