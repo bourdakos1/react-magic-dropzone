@@ -1,6 +1,6 @@
 {
   "name": "react-magic-dropzone",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Magically drag and drop files/links, built for React",
   "main": "build/index.js",
   "directories": {
@@ -15,12 +15,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/CHANGEME.git"
+    "url": "https://github.com/bourdakos1/react-magic-dropzone.git"
   },
   "bugs": {
-    "url": "https://github.com/CHANGEME/issues"
+    "url": "https://github.com/bourdakos1/react-magic-dropzone/issues"
   },
-  "homepage": "https://github.com/CHANGEME",
+  "homepage": "https://github.com/bourdakos1/react-magic-dropzone",
   "author": "Nick Bourdakos",
   "license": "MIT",
   "scripts": {
@@ -29,7 +29,7 @@
     "lint": "npm run lint:js && npm run lint:style",
     "lint:js": "eslint src/**; exit 0",
     "lint:js:watch": "esw -w src/**",
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "review": "run-s lint test:clean test test:coverage:report",
     "lint:style": "stylelint -- \"./src/**/*.js\"",
     "test": "jest src/**; exit 0",
