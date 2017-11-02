@@ -3,9 +3,9 @@
 
 ## Demo
 
-[![demo.png](/screenshots/demo.png)](https://jvorp575k9.codesandbox.io/)
+[![demo.png](/screenshots/demo.png)](https://y200pqy4pz.codesandbox.io/)
 
-Try out the [demo](https://jvorp575k9.codesandbox.io/)!
+Try out the [demo](https://y200pqy4pz.codesandbox.io/)!
 
 ## Installation
 
