@@ -1,11 +1,9 @@
-# Magic Dropzone [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Drag-and-drop%20files%20or%20urls!%20Built%20for%20React:&url=https://github.com/bourdakos1/react-magic-dropzone&hashtags=react,component,dropzone,developers)
+# ✨Magic Dropzone [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Drag-and-drop%20files%20or%20urls!%20Built%20for%20React:&url=https://github.com/bourdakos1/react-magic-dropzone&hashtags=react,component,dropzone,developers)
 
 [![Build Status](https://travis-ci.org/bourdakos1/react-magic-dropzone.svg?branch=master)](https://travis-ci.org/bourdakos1/react-magic-dropzone)
 [![codecov](https://codecov.io/gh/bourdakos1/react-magic-dropzone/branch/master/graph/badge.svg)](https://codecov.io/gh/bourdakos1/react-magic-dropzone)
 [![npm-version](https://img.shields.io/npm/v/react-magic-dropzone.svg)](https://www.npmjs.com/package/react-magic-dropzone)
 [![npm-downloads](https://img.shields.io/npm/dm/react-magic-dropzone.svg)](https://www.npmjs.com/package/react-magic-dropzone)
-
-![react-dropzone logo](https://storybird.s3.amazonaws.com/artwork/PaulMcDougall/square_crops/magic.jpeg)
 
 ## Demo
 
