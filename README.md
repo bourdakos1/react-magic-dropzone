@@ -21,6 +21,8 @@ import MagicDropzone from 'react-magic-dropzone'
 ```
 
 ```jsx
+onDrop = (accepted, rejected, links) => {}
+
 <MagicDropzone
   accept="image/jpeg, image/png, .jpg, .jpeg, .png"
   onDrop={this.onDrop}
