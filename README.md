@@ -8,8 +8,10 @@
 ![react-dropzone logo](https://storybird.s3.amazonaws.com/artwork/PaulMcDougall/square_crops/magic.jpeg)
 
 ## Demo
-gif
+
+<div align="center">
 [![demo.png](https://media.giphy.com/media/3o6nUQ6Fuws5zOGM2k/giphy.gif)](https://codesandbox.io/embed/y200pqy4pz?view=preview)
+</div>
 
 Try out the [demo](https://codesandbox.io/embed/y200pqy4pz?view=preview)!
 
