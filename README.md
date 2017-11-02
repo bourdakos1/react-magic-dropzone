@@ -8,8 +8,8 @@
 ![react-dropzone logo](https://storybird.s3.amazonaws.com/artwork/PaulMcDougall/square_crops/magic.jpeg)
 
 ## Demo
-
-[![demo.png](https://thumbs.gfycat.com/BadMadAdmiralbutterfly-size_restricted.gif)](https://codesandbox.io/embed/y200pqy4pz?view=preview)
+gif
+[![demo.png](https://media.giphy.com/media/3o6nUQ6Fuws5zOGM2k/giphy.gif)](https://codesandbox.io/embed/y200pqy4pz?view=preview)
 
 Try out the [demo](https://codesandbox.io/embed/y200pqy4pz?view=preview)!
 
