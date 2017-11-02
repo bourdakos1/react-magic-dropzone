@@ -1,4 +1,7 @@
 # Magic Dropzone
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="fyzlmn">Tweet</a>
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
 ![react-dropzone logo](https://storybird.s3.amazonaws.com/artwork/PaulMcDougall/square_crops/magic.jpeg)
 
 ## Demo
