@@ -9,7 +9,7 @@
 
 ## Demo
 
-[![demo.png](https://gfycat.com/gifs/detail/BadMadAdmiralbutterfly)](https://codesandbox.io/embed/y200pqy4pz?view=preview)
+[![demo.png](https://thumbs.gfycat.com/BadMadAdmiralbutterfly-size_restricted.gif)](https://codesandbox.io/embed/y200pqy4pz?view=preview)
 
 Try out the [demo](https://codesandbox.io/embed/y200pqy4pz?view=preview)!
 
