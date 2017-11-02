@@ -9,7 +9,7 @@
 
 ## Demo
 
-[![demo.png](/screenshots/demo.png)](https://codesandbox.io/embed/y200pqy4pz?view=preview)
+[![demo.png](https://gfycat.com/gifs/detail/BadMadAdmiralbutterfly)](https://codesandbox.io/embed/y200pqy4pz?view=preview)
 
 Try out the [demo](https://codesandbox.io/embed/y200pqy4pz?view=preview)!
 
