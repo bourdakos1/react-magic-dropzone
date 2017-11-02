@@ -1,5 +1,4 @@
-# Magic Dropzone
-[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Drag-and-drop%20files%20or%20urls%20with%20react&url=https://github.com/bourdakos1/react-magic-dropzone&hashtags=react,component,dropzone,developers)
+# Magic Dropzone [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Drag-and-drop%20files%20or%20urls!%20built%20for%20React:&url=https://github.com/bourdakos1/react-magic-dropzone&hashtags=react,component,dropzone,developers)
 
 ![react-dropzone logo](https://storybird.s3.amazonaws.com/artwork/PaulMcDougall/square_crops/magic.jpeg)
 
