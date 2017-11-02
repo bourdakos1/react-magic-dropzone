@@ -2,6 +2,12 @@
 
 # react-magic-dropzone
 
+## Demo
+
+[![demo.png](demo)](https://jvorp575k9.codesandbox.io/)
+
+Try out the [demo](https://jvorp575k9.codesandbox.io/)!
+
 ## Installation
 
 ```bash
