@@ -1,6 +1,5 @@
+# Magic Dropzone
 ![react-dropzone logo](https://storybird.s3.amazonaws.com/artwork/PaulMcDougall/square_crops/magic.jpeg)
-
-# react-magic-dropzone
 
 ## Demo
 
