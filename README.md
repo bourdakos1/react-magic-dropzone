@@ -45,7 +45,7 @@ onDrop = (accepted, rejected, links) => {
 </MagicDropzone>
 ```
 
-[![Edit jvorp575k9](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/jvorp575k9)
+[![Edit y200pqy4pz](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/y200pqy4pz)
 
 ## License
 
