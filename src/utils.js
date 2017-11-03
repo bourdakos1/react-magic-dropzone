@@ -37,10 +37,6 @@ export function allFilesAccepted(files, accept) {
 
 // allow the entire document to be a drag target
 export function onDocumentDragOver(e) {
-  if (e.target.getAttribute('type') === 'text') {
-    return
-  }
-
   e.preventDefault()
 }
 

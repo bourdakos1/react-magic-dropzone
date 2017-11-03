@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { string, func } from 'prop-types'
 
 import {
   supportMultiple,
@@ -58,10 +57,6 @@ class MagicDropzone extends Component {
   onDocumentDrop = e => {
     if (this.node && this.node.contains(e.target)) {
       // if we intercepted an event for our instance, let it propagate down to the instance's onDrop handler
-      return
-    }
-
-    if (e.target.getAttribute('type') === 'text') {
       return
     }
 
@@ -148,7 +143,7 @@ class MagicDropzone extends Component {
     })
 
     if (onDragLeave) {
-      onDragLeave.call(this, evt)
+      onDragLeave.call(this, e)
     }
   }
 
@@ -233,7 +228,7 @@ class MagicDropzone extends Component {
       e.stopPropagation()
 
       if (onClick) {
-        onClick.call(this, evt)
+        onClick.call(this, e)
       }
 
       // in IE11/Edge the file-browser dialog is blocking, ensure this is behind setTimeout
@@ -348,12 +343,10 @@ class MagicDropzone extends Component {
       accept,
       children,
       disabled,
-      inputProps,
       multiple,
-      name
     } = this.props
 
-    const { isDragActive, draggedFiles, isLink } = this.state
+    const { isDragActive, draggedFiles } = this.state
 
     const filesCount = draggedFiles.length
     const isMultipleAllowed = multiple || filesCount <= 1

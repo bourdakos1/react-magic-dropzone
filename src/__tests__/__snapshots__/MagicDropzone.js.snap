@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MagicDropzone basics should render children 1`] = `"<div aria-disabled=\\"false\\"><p>some content</p><input type=\\"file\\" style=\\"display: none;\\" multiple=\\"\\" autocomplete=\\"off\\"></div>"`;
+
+exports[`MagicDropzone document drop protection does not prevent stray drops when preventDropOnDocument is false 1`] = `"<div aria-disabled=\\"false\\"><input type=\\"file\\" style=\\"display: none;\\" multiple=\\"\\" autocomplete=\\"off\\"></div>"`;
+
+exports[`MagicDropzone document drop protection installs hooks to prevent stray drops from taking over the browser window 1`] = `"<div aria-disabled=\\"false\\"><p>Content</p><input type=\\"file\\" style=\\"display: none;\\" multiple=\\"\\" autocomplete=\\"off\\"></div>"`;
