@@ -165,7 +165,19 @@ class MagicDropzone extends Component {
     // Stop default browser behavior
     e.preventDefault()
 
-    if (this.state.isLink) {
+
+    // TODO: We should pull this out into utils.
+    const dt = e.dataTransfer
+    // If dt.types doesn't contain 'Files'
+    if (
+      !(
+        dt.types &&
+        // Sometimes we need to use "contains" instead of "indexOf"
+        (dt.types.indexOf
+          ? dt.types.indexOf('Files') !== -1
+          : dt.types.contains('Files'))
+      )
+    ) {
       this.onLink(e)
       return
     }
@@ -180,7 +192,7 @@ class MagicDropzone extends Component {
           file.preview = window.URL.createObjectURL(file)
         } catch (err) {
           if (process.env.NODE_ENV !== 'production') {
-            console.error('Failed to generate preview for file', file, err)
+            // console.error('Failed to generate preview for file', file, err)
           }
         }
       }

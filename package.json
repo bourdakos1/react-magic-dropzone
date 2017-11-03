@@ -1,6 +1,6 @@
 {
   "name": "react-magic-dropzone",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Magically drag and drop files/links, built for React",
   "main": "build/index.js",
   "directories": {

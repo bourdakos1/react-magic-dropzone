@@ -19,9 +19,17 @@ global.window.URL = {
 
 let files
 let images
+let testLinks
 
 describe('MagicDropzone', () => {
   beforeEach(() => {
+    testLinks = {
+      image1: 'https://image.jpg',
+      json: 'http://test.json',
+      html: '<img class="  --" sizes="50vw" srcset="https://images.fastcompany.net/image/upload/w_707,ar_16:9,c_limit,f_auto,q_auto:best,fl_lossy/wp-cms/uploads/2017/06/p-1-sonic-burger.jpg 707w" alt="The Newest Burger At Sonic Blends The Beef With Mushrooms So You Eat Less Meat">',
+      html2: '<html><img src="https://fun.jpg"><div>tests are fun</div><img src="https://fun2.json"></html>'
+    }
+
     files = [
       {
         name: 'file1.pdf',
@@ -307,9 +315,9 @@ describe('MagicDropzone', () => {
         />
       )
       component.simulate('dragStart')
-      component.simulate('dragEnter', { dataTransfer: { items: files } })
-      component.simulate('dragOver', { dataTransfer: { items: files } })
-      component.simulate('dragLeave', { dataTransfer: { items: files } })
+      component.simulate('dragEnter', { dataTransfer: { types: ['Files'], items: files } })
+      component.simulate('dragOver', { dataTransfer: { types: ['Files'], items: files } })
+      component.simulate('dragLeave', { dataTransfer: { types: ['Files'], items: files } })
       expect(dragStartSpy.callCount).toEqual(1)
       expect(dragEnterSpy.callCount).toEqual(1)
       expect(dragOverSpy.callCount).toEqual(1)
@@ -348,10 +356,10 @@ describe('MagicDropzone', () => {
         component.instance().onDragOver(eventProxy)
       )
 
-      component.simulate('dragStart', { dataTransfer: { items: files } })
-      component.simulate('dragEnter', { dataTransfer: { items: files } })
-      component.simulate('dragOver', { dataTransfer: { items: files } })
-      component.simulate('dragLeave', { dataTransfer: { items: files } })
+      component.simulate('dragStart', { dataTransfer: { types: ['Files'], items: files } })
+      component.simulate('dragEnter', { dataTransfer: { types: ['Files'], items: files } })
+      component.simulate('dragOver', { dataTransfer: { types: ['Files'], items: files } })
+      component.simulate('dragLeave', { dataTransfer: { types: ['Files'], items: files } })
       expect(dragStartSpy.callCount).toEqual(1)
       expect(dragEnterSpy.callCount).toEqual(1)
       expect(dragLeaveSpy.callCount).toEqual(1)
@@ -453,9 +461,9 @@ describe('MagicDropzone', () => {
         </MagicDropzone>
       )
       expect(dropzone.text()).toEqual('Empty')
-      dropzone.simulate('dragEnter', { dataTransfer: { files: images } })
+      dropzone.simulate('dragEnter', { dataTransfer: { types: ['Files'], files: images } })
       expect(dropzone.text()).toEqual('Active and Accept')
-      dropzone.simulate('dragEnter', { dataTransfer: { files } })
+      dropzone.simulate('dragEnter', { dataTransfer: { types: ['Files'], files } })
       expect(dropzone.text()).toEqual('Active but Reject')
     })
 
@@ -508,327 +516,332 @@ describe('MagicDropzone', () => {
     //   })
   })
 
-  //
-  //   describe('onDrop', () => {
-  //     let dropSpy
-  //     let dropAcceptedSpy
-  //     let dropRejectedSpy
-  //
-  //     beforeEach(() => {
-  //       dropSpy = spy()
-  //       dropAcceptedSpy = spy()
-  //       dropRejectedSpy = spy()
-  //     })
-  //
-  //     afterEach(() => {
-  //       dropSpy.reset()
-  //       dropAcceptedSpy.reset()
-  //       dropRejectedSpy.reset()
-  //     })
-  //
-  //     it('should reset the dragActive/dragReject state', () => {
-  //       const dropzone = mount(
-  //         <MagicDropzone
-  //           onDrop={dropSpy}
-  //           onDropAccepted={dropAcceptedSpy}
-  //           onDropRejected={dropRejectedSpy}
-  //         >
-  //           {props => <DummyChildComponent {...props} />}
-  //         </MagicDropzone>
-  //       )
-  //       const child = dropzone.find(DummyChildComponent)
-  //       dropzone.simulate('dragEnter', { dataTransfer: { files } })
-  //       expect(child).toHaveProp('isDragActive', true)
-  //       expect(child).toHaveProp('isDragReject', false)
-  //       dropzone.simulate('drop', { dataTransfer: { files } })
-  //       expect(child).toHaveProp('isDragActive', false)
-  //       expect(child).toHaveProp('isDragReject', false)
-  //     })
-  //
-  //     it('should add valid files to rejected files on a multple drop when multiple false', () => {
-  //       const dropzone = mount(<MagicDropzone accept="image/*" onDrop={dropSpy} multiple={false} />)
-  //       dropzone.simulate('drop', { dataTransfer: { files: images } })
-  //       const rejected = dropSpy.firstCall.args[0]
-  //       expect(rejected.length).toEqual(1)
-  //     })
-  //
-  //     it('should add invalid files to rejected when multiple is false', () => {
-  //       const dropzone = mount(<MagicDropzone accept="image/*" onDrop={dropSpy} multiple={false} />)
-  //       dropzone.simulate('drop', {
-  //         dataTransfer: { files: images.concat(files) }
-  //       })
-  //       const rejected = dropSpy.firstCall.args[1]
-  //       expect(rejected.length).toEqual(2)
-  //     })
-  //
-  //     it('should allow single files to be dropped if multiple is false', () => {
-  //       const dropzone = mount(<MagicDropzone accept="image/*" onDrop={dropSpy} multiple={false} />)
-  //
-  //       dropzone.simulate('drop', { dataTransfer: { files: [images[0]] } })
-  //       const [accepted, rejected] = dropSpy.firstCall.args
-  //       expect(accepted.length).toEqual(1)
-  //       expect(rejected.length).toEqual(0)
-  //     })
-  //
-  //     it('should take all dropped files if multiple is true', () => {
-  //       const dropzone = mount(<MagicDropzone onDrop={dropSpy} multiple />)
-  //       dropzone.simulate('drop', { dataTransfer: { files: images } })
-  //       expect(dropSpy.firstCall.args[0]).toHaveLength(2)
-  //       expect(dropSpy.firstCall.args[0][0].name).toEqual(images[0].name)
-  //       expect(dropSpy.firstCall.args[0][1].name).toEqual(images[1].name)
-  //     })
-  //
-  //     it('should set this.isFileDialogActive to false', () => {
-  //       const dropzone = mount(<MagicDropzone />)
-  //       dropzone.instance().isFileDialogActive = true
-  //       dropzone.simulate('drop', { dataTransfer: { files } })
-  //       expect(dropzone.instance().isFileDialogActive).toEqual(false)
-  //     })
-  //
-  //     it('should always call onDrop callback with accepted and rejected arguments', () => {
-  //       const dropzone = mount(
-  //         <MagicDropzone
-  //           onDrop={dropSpy}
-  //           onDropAccepted={dropAcceptedSpy}
-  //           onDropRejected={dropRejectedSpy}
-  //           accept="image/*"
-  //         />
-  //       )
-  //       dropzone.simulate('drop', { dataTransfer: { files } })
-  //       expect(dropSpy.callCount).toEqual(1)
-  //       expect(dropSpy.firstCall.args[0]).toEqual([], [...files])
-  //       dropzone.simulate('drop', { dataTransfer: { files: images } })
-  //       expect(dropSpy.callCount).toEqual(2)
-  //       expect(dropSpy.lastCall.args[0]).toEqual([...images], [])
-  //       dropzone.simulate('drop', {
-  //         dataTransfer: { files: files.concat(images) }
-  //       })
-  //       expect(dropSpy.callCount).toEqual(3)
-  //       expect(dropSpy.lastCall.args[0]).toEqual([...images], [...files])
-  //     })
-  //
-  //     it('should call onDropAccepted callback if some files were accepted', () => {
-  //       const dropzone = mount(
-  //         <MagicDropzone
-  //           onDrop={dropSpy}
-  //           onDropAccepted={dropAcceptedSpy}
-  //           onDropRejected={dropRejectedSpy}
-  //           accept="image/*"
-  //         />
-  //       )
-  //       dropzone.simulate('drop', { dataTransfer: { files } })
-  //       expect(dropAcceptedSpy.callCount).toEqual(0)
-  //       dropzone.simulate('drop', { dataTransfer: { files: images } })
-  //       expect(dropAcceptedSpy.callCount).toEqual(1)
-  //       expect(dropAcceptedSpy.lastCall.args[0]).toEqual([...images])
-  //       dropzone.simulate('drop', {
-  //         dataTransfer: { files: files.concat(images) }
-  //       })
-  //       expect(dropAcceptedSpy.callCount).toEqual(2)
-  //       expect(dropAcceptedSpy.lastCall.args[0]).toEqual([...images])
-  //     })
-  //
-  //     it('should call onDropRejected callback if some files were rejected', () => {
-  //       const dropzone = mount(
-  //         <MagicDropzone
-  //           onDrop={dropSpy}
-  //           onDropAccepted={dropAcceptedSpy}
-  //           onDropRejected={dropRejectedSpy}
-  //           accept="image/*"
-  //         />
-  //       )
-  //       dropzone.simulate('drop', { dataTransfer: { files } })
-  //       expect(dropRejectedSpy.callCount).toEqual(1)
-  //       expect(dropRejectedSpy.lastCall.args[0]).toEqual([...files])
-  //       dropzone.simulate('drop', { dataTransfer: { files: images } })
-  //       expect(dropRejectedSpy.callCount).toEqual(1)
-  //       dropzone.simulate('drop', {
-  //         dataTransfer: { files: files.concat(images) }
-  //       })
-  //       expect(dropRejectedSpy.callCount).toEqual(2)
-  //       expect(dropRejectedSpy.lastCall.args[0]).toEqual([...files])
-  //     })
-  //
-  //     it('applies the accept prop to the dropped files', () => {
-  //       const dropzone = mount(
-  //         <MagicDropzone
-  //           onDrop={dropSpy}
-  //           onDropAccepted={dropAcceptedSpy}
-  //           onDropRejected={dropRejectedSpy}
-  //           accept="image/*"
-  //         />
-  //       )
-  //       dropzone.simulate('drop', { dataTransfer: { files } })
-  //       expect(dropSpy.callCount).toEqual(1)
-  //       expect(dropSpy.firstCall.args[0]).toHaveLength(0)
-  //       expect(dropSpy.firstCall.args[1]).toHaveLength(1)
-  //       expect(dropAcceptedSpy.callCount).toEqual(0)
-  //       expect(dropRejectedSpy.callCount).toEqual(1)
-  //       expect(dropRejectedSpy.firstCall.args[0]).toHaveLength(1)
-  //     })
-  //
-  //     it('applies the accept prop to the dropped images', () => {
-  //       const dropzone = mount(
-  //         <MagicDropzone
-  //           onDrop={dropSpy}
-  //           onDropAccepted={dropAcceptedSpy}
-  //           onDropRejected={dropRejectedSpy}
-  //           accept="image/*"
-  //         />
-  //       )
-  //
-  //       dropzone.simulate('drop', { dataTransfer: { files: images } })
-  //       expect(dropSpy.callCount).toEqual(1)
-  //       expect(dropSpy.firstCall.args[0]).toHaveLength(2)
-  //       expect(dropSpy.firstCall.args[1]).toHaveLength(0)
-  //       expect(dropAcceptedSpy.callCount).toEqual(1)
-  //       expect(dropAcceptedSpy.firstCall.args[0]).toHaveLength(2)
-  //       expect(dropRejectedSpy.callCount).toEqual(0)
-  //     })
-  //
-  //     it('accepts a dropped image when Firefox provides a bogus file type', () => {
-  //       const dropzone = mount(
-  //         <MagicDropzone
-  //           onDrop={dropSpy}
-  //           onDropAccepted={dropAcceptedSpy}
-  //           onDropRejected={dropRejectedSpy}
-  //           accept="image/*"
-  //         />
-  //       )
-  //       const bogusImages = [
-  //         {
-  //           name: 'bogus.gif',
-  //           size: 1234,
-  //           type: 'application/x-moz-file'
-  //         }
-  //       ]
-  //
-  //       dropzone.simulate('drop', { dataTransfer: { files: bogusImages } })
-  //       expect(dropSpy.callCount).toEqual(1)
-  //       expect(dropSpy.firstCall.args[0]).toHaveLength(1)
-  //       expect(dropSpy.firstCall.args[1]).toHaveLength(0)
-  //       expect(dropAcceptedSpy.callCount).toEqual(1)
-  //       expect(dropAcceptedSpy.firstCall.args[0]).toHaveLength(1)
-  //       expect(dropRejectedSpy.callCount).toEqual(0)
-  //     })
-  //
-  //     it('accepts all dropped files and images when no accept prop is specified', () => {
-  //       const dropzone = mount(
-  //         <MagicDropzone
-  //           onDrop={dropSpy}
-  //           onDropAccepted={dropAcceptedSpy}
-  //           onDropRejected={dropRejectedSpy}
-  //         />
-  //       )
-  //       dropzone.simulate('drop', {
-  //         dataTransfer: { files: files.concat(images) }
-  //       })
-  //       expect(dropSpy.callCount).toEqual(1)
-  //       expect(dropSpy.firstCall.args[0]).toHaveLength(3)
-  //       expect(dropSpy.firstCall.args[1]).toHaveLength(0)
-  //       expect(dropAcceptedSpy.callCount).toEqual(1)
-  //       expect(dropAcceptedSpy.firstCall.args[0]).toHaveLength(3)
-  //       expect(dropRejectedSpy.callCount).toEqual(0)
-  //     })
-  //
-  //     it('applies the maxSize prop to the dropped files', () => {
-  //       const dropzone = mount(
-  //         <MagicDropzone
-  //           onDrop={dropSpy}
-  //           onDropAccepted={dropAcceptedSpy}
-  //           onDropRejected={dropRejectedSpy}
-  //           maxSize={1111}
-  //         />
-  //       )
-  //
-  //       dropzone.simulate('drop', { dataTransfer: { files } })
-  //       expect(dropSpy.callCount).toEqual(1)
-  //       expect(dropSpy.firstCall.args[0]).toHaveLength(1)
-  //       expect(dropSpy.firstCall.args[1]).toHaveLength(0)
-  //       expect(dropAcceptedSpy.callCount).toEqual(1)
-  //       expect(dropAcceptedSpy.firstCall.args[0]).toHaveLength(1)
-  //       expect(dropRejectedSpy.callCount).toEqual(0)
-  //     })
-  //
-  //     it('applies the maxSize prop to the dropped images', () => {
-  //       const dropzone = mount(
-  //         <MagicDropzone
-  //           onDrop={dropSpy}
-  //           onDropAccepted={dropAcceptedSpy}
-  //           onDropRejected={dropRejectedSpy}
-  //           maxSize={1111}
-  //         />
-  //       )
-  //       dropzone.simulate('drop', { dataTransfer: { files: images } })
-  //       expect(dropSpy.callCount).toEqual(1)
-  //       expect(dropSpy.firstCall.args[0]).toHaveLength(0)
-  //       expect(dropSpy.firstCall.args[1]).toHaveLength(2)
-  //       expect(dropAcceptedSpy.callCount).toEqual(0)
-  //       expect(dropRejectedSpy.callCount).toEqual(1)
-  //       expect(dropRejectedSpy.firstCall.args[0]).toHaveLength(2)
-  //     })
-  //
-  //     it('applies the minSize prop to the dropped files', () => {
-  //       const dropzone = mount(
-  //         <MagicDropzone
-  //           onDrop={dropSpy}
-  //           onDropAccepted={dropAcceptedSpy}
-  //           onDropRejected={dropRejectedSpy}
-  //           minSize={1112}
-  //         />
-  //       )
-  //       dropzone.simulate('drop', { dataTransfer: { files } })
-  //       expect(dropSpy.callCount).toEqual(1)
-  //       expect(dropSpy.firstCall.args[0]).toHaveLength(0)
-  //       expect(dropSpy.firstCall.args[1]).toHaveLength(1)
-  //       expect(dropAcceptedSpy.callCount).toEqual(0)
-  //       expect(dropRejectedSpy.callCount).toEqual(1)
-  //       expect(dropRejectedSpy.firstCall.args[0]).toHaveLength(1)
-  //     })
-  //
-  //     it('applies the minSize prop to the dropped images', () => {
-  //       const dropzone = mount(
-  //         <MagicDropzone
-  //           onDrop={dropSpy}
-  //           onDropAccepted={dropAcceptedSpy}
-  //           onDropRejected={dropRejectedSpy}
-  //           minSize={1112}
-  //         />
-  //       )
-  //       dropzone.simulate('drop', { dataTransfer: { files: images } })
-  //       expect(dropSpy.callCount).toEqual(1)
-  //       expect(dropSpy.firstCall.args[0]).toHaveLength(2)
-  //       expect(dropSpy.firstCall.args[1]).toHaveLength(0)
-  //       expect(dropAcceptedSpy.callCount).toEqual(1)
-  //       expect(dropAcceptedSpy.firstCall.args[0]).toHaveLength(2)
-  //       expect(dropRejectedSpy.callCount).toEqual(0)
-  //     })
-  //
-  //     it('accepts all dropped files and images when no size prop is specified', () => {
-  //       const dropzone = mount(
-  //         <MagicDropzone
-  //           onDrop={dropSpy}
-  //           onDropAccepted={dropAcceptedSpy}
-  //           onDropRejected={dropRejectedSpy}
-  //         />
-  //       )
-  //       dropzone.simulate('drop', {
-  //         dataTransfer: { files: files.concat(images) }
-  //       })
-  //       expect(dropSpy.callCount).toEqual(1)
-  //       expect(dropSpy.firstCall.args[0]).toHaveLength(3)
-  //       expect(dropSpy.firstCall.args[1]).toHaveLength(0)
-  //       expect(dropAcceptedSpy.callCount).toEqual(1)
-  //       expect(dropAcceptedSpy.firstCall.args[0]).toHaveLength(3)
-  //       expect(dropRejectedSpy.callCount).toEqual(0)
-  //     })
-  //   })
+  describe('onDrop', () => {
+    let dropSpy
+    let dropAcceptedSpy
+    let dropRejectedSpy
+
+    beforeEach(() => {
+      dropSpy = spy()
+      dropAcceptedSpy = spy()
+      dropRejectedSpy = spy()
+    })
+
+    afterEach(() => {
+      dropSpy.reset()
+      dropAcceptedSpy.reset()
+      dropRejectedSpy.reset()
+    })
+
+    // it('should reset the dragActive/dragReject state', () => {
+    //   const dropzone = mount(
+    //     <MagicDropzone
+    //       onDrop={dropSpy}
+    //       onDropAccepted={dropAcceptedSpy}
+    //       onDropRejected={dropRejectedSpy}
+    //     >
+    //       {props => <DummyChildComponent {...props} />}
+    //     </MagicDropzone>
+    //   )
+    //   const child = dropzone.find(DummyChildComponent)
+    //   dropzone.simulate('dragEnter', { dataTransfer: { files } })
+    //   expect(child).toHaveProp('isDragActive', true)
+    //   expect(child).toHaveProp('isDragReject', false)
+    //   dropzone.simulate('drop', { dataTransfer: { files } })
+    //   expect(child).toHaveProp('isDragActive', false)
+    //   expect(child).toHaveProp('isDragReject', false)
+    // })
+
+    it('should add valid files to rejected files on a multple drop when multiple false', () => {
+      const dropzone = mount(
+        <MagicDropzone accept="image/*" onDrop={dropSpy} multiple={false} />
+      )
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files: images } })
+      const rejected = dropSpy.firstCall.args[0]
+      expect(rejected.length).toEqual(1)
+    })
+
+    it('should add invalid files to rejected when multiple is false', () => {
+      const dropzone = mount(
+        <MagicDropzone accept="image/*" onDrop={dropSpy} multiple={false} />
+      )
+      dropzone.simulate('drop', {
+        dataTransfer: { types: ['Files'], files: images.concat(files) }
+      })
+      const rejected = dropSpy.firstCall.args[1]
+      expect(rejected.length).toEqual(2)
+    })
+
+    it('should allow single files to be dropped if multiple is false', () => {
+      const dropzone = mount(
+        <MagicDropzone accept="image/*" onDrop={dropSpy} multiple={false} />
+      )
+
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files: [images[0]] } })
+      const [accepted, rejected] = dropSpy.firstCall.args
+      expect(accepted.length).toEqual(1)
+      expect(rejected.length).toEqual(0)
+    })
+
+    it('should take all dropped files if multiple is true', () => {
+      const dropzone = mount(<MagicDropzone onDrop={dropSpy} multiple />)
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files: images } })
+      expect(dropSpy.firstCall.args[0]).toHaveLength(2)
+      expect(dropSpy.firstCall.args[0][0].name).toEqual(images[0].name)
+      expect(dropSpy.firstCall.args[0][1].name).toEqual(images[1].name)
+    })
+
+    it('should set this.isFileDialogActive to false', () => {
+      const dropzone = mount(<MagicDropzone />)
+      dropzone.instance().isFileDialogActive = true
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files } })
+      expect(dropzone.instance().isFileDialogActive).toEqual(false)
+    })
+
+    it('should always call onDrop callback with accepted and rejected arguments', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          onDrop={dropSpy}
+          onDropAccepted={dropAcceptedSpy}
+          onDropRejected={dropRejectedSpy}
+          accept="image/*"
+        />
+      )
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files } })
+      expect(dropSpy.callCount).toEqual(1)
+      expect(dropSpy.firstCall.args[0]).toEqual([], [...files])
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files: images } })
+      expect(dropSpy.callCount).toEqual(2)
+      expect(dropSpy.lastCall.args[0]).toEqual([...images], [])
+      dropzone.simulate('drop', {
+        dataTransfer: { types: ['Files'], files: files.concat(images) }
+      })
+      expect(dropSpy.callCount).toEqual(3)
+      expect(dropSpy.lastCall.args[0]).toEqual([...images], [...files])
+    })
+
+    it('should call onDropAccepted callback if some files were accepted', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          onDrop={dropSpy}
+          onDropAccepted={dropAcceptedSpy}
+          onDropRejected={dropRejectedSpy}
+          accept="image/*"
+        />
+      )
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files } })
+      expect(dropAcceptedSpy.callCount).toEqual(0)
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files: images } })
+      expect(dropAcceptedSpy.callCount).toEqual(1)
+      expect(dropAcceptedSpy.lastCall.args[0]).toEqual([...images])
+      dropzone.simulate('drop', {
+        dataTransfer: { types: ['Files'], files: files.concat(images) }
+      })
+      expect(dropAcceptedSpy.callCount).toEqual(2)
+      expect(dropAcceptedSpy.lastCall.args[0]).toEqual([...images])
+    })
+
+    it('should call onDropRejected callback if some files were rejected', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          onDrop={dropSpy}
+          onDropAccepted={dropAcceptedSpy}
+          onDropRejected={dropRejectedSpy}
+          accept="image/*"
+        />
+      )
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files } })
+      expect(dropRejectedSpy.callCount).toEqual(1)
+      expect(dropRejectedSpy.lastCall.args[0]).toEqual([...files])
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files: images } })
+      expect(dropRejectedSpy.callCount).toEqual(1)
+      dropzone.simulate('drop', {
+        dataTransfer: { types: ['Files'], files: files.concat(images) }
+      })
+      expect(dropRejectedSpy.callCount).toEqual(2)
+      expect(dropRejectedSpy.lastCall.args[0]).toEqual([...files])
+    })
+
+    it('applies the accept prop to the dropped files', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          onDrop={dropSpy}
+          onDropAccepted={dropAcceptedSpy}
+          onDropRejected={dropRejectedSpy}
+          accept="image/*"
+        />
+      )
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files } })
+      expect(dropSpy.callCount).toEqual(1)
+      expect(dropSpy.firstCall.args[0]).toHaveLength(0)
+      expect(dropSpy.firstCall.args[1]).toHaveLength(1)
+      expect(dropAcceptedSpy.callCount).toEqual(0)
+      expect(dropRejectedSpy.callCount).toEqual(1)
+      expect(dropRejectedSpy.firstCall.args[0]).toHaveLength(1)
+    })
+
+    it('applies the accept prop to the dropped images', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          onDrop={dropSpy}
+          onDropAccepted={dropAcceptedSpy}
+          onDropRejected={dropRejectedSpy}
+          accept="image/*"
+        />
+      )
+
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files: images } })
+      expect(dropSpy.callCount).toEqual(1)
+      expect(dropSpy.firstCall.args[0]).toHaveLength(2)
+      expect(dropSpy.firstCall.args[1]).toHaveLength(0)
+      expect(dropAcceptedSpy.callCount).toEqual(1)
+      expect(dropAcceptedSpy.firstCall.args[0]).toHaveLength(2)
+      expect(dropRejectedSpy.callCount).toEqual(0)
+    })
+
+    it('accepts a dropped image when Firefox provides a bogus file type', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          onDrop={dropSpy}
+          onDropAccepted={dropAcceptedSpy}
+          onDropRejected={dropRejectedSpy}
+          accept="image/*"
+        />
+      )
+      const bogusImages = [
+        {
+          name: 'bogus.gif',
+          size: 1234,
+          type: 'application/x-moz-file'
+        }
+      ]
+
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files: bogusImages } })
+      expect(dropSpy.callCount).toEqual(1)
+      expect(dropSpy.firstCall.args[0]).toHaveLength(1)
+      expect(dropSpy.firstCall.args[1]).toHaveLength(0)
+      expect(dropAcceptedSpy.callCount).toEqual(1)
+      expect(dropAcceptedSpy.firstCall.args[0]).toHaveLength(1)
+      expect(dropRejectedSpy.callCount).toEqual(0)
+    })
+
+    it('accepts all dropped files and images when no accept prop is specified', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          onDrop={dropSpy}
+          onDropAccepted={dropAcceptedSpy}
+          onDropRejected={dropRejectedSpy}
+        />
+      )
+      dropzone.simulate('drop', {
+        dataTransfer: { types: ['Files'], files: files.concat(images) }
+      })
+      expect(dropSpy.callCount).toEqual(1)
+      expect(dropSpy.firstCall.args[0]).toHaveLength(3)
+      expect(dropSpy.firstCall.args[1]).toHaveLength(0)
+      expect(dropAcceptedSpy.callCount).toEqual(1)
+      expect(dropAcceptedSpy.firstCall.args[0]).toHaveLength(3)
+      expect(dropRejectedSpy.callCount).toEqual(0)
+    })
+
+    it('applies the maxSize prop to the dropped files', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          onDrop={dropSpy}
+          onDropAccepted={dropAcceptedSpy}
+          onDropRejected={dropRejectedSpy}
+          maxSize={1111}
+        />
+      )
+
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files } })
+      expect(dropSpy.callCount).toEqual(1)
+      expect(dropSpy.firstCall.args[0]).toHaveLength(1)
+      expect(dropSpy.firstCall.args[1]).toHaveLength(0)
+      expect(dropAcceptedSpy.callCount).toEqual(1)
+      expect(dropAcceptedSpy.firstCall.args[0]).toHaveLength(1)
+      expect(dropRejectedSpy.callCount).toEqual(0)
+    })
+
+    it('applies the maxSize prop to the dropped images', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          onDrop={dropSpy}
+          onDropAccepted={dropAcceptedSpy}
+          onDropRejected={dropRejectedSpy}
+          maxSize={1111}
+        />
+      )
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files: images } })
+      expect(dropSpy.callCount).toEqual(1)
+      expect(dropSpy.firstCall.args[0]).toHaveLength(0)
+      expect(dropSpy.firstCall.args[1]).toHaveLength(2)
+      expect(dropAcceptedSpy.callCount).toEqual(0)
+      expect(dropRejectedSpy.callCount).toEqual(1)
+      expect(dropRejectedSpy.firstCall.args[0]).toHaveLength(2)
+    })
+
+    it('applies the minSize prop to the dropped files', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          onDrop={dropSpy}
+          onDropAccepted={dropAcceptedSpy}
+          onDropRejected={dropRejectedSpy}
+          minSize={1112}
+        />
+      )
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files } })
+      expect(dropSpy.callCount).toEqual(1)
+      expect(dropSpy.firstCall.args[0]).toHaveLength(0)
+      expect(dropSpy.firstCall.args[1]).toHaveLength(1)
+      expect(dropAcceptedSpy.callCount).toEqual(0)
+      expect(dropRejectedSpy.callCount).toEqual(1)
+      expect(dropRejectedSpy.firstCall.args[0]).toHaveLength(1)
+    })
+
+    it('applies the minSize prop to the dropped images', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          onDrop={dropSpy}
+          onDropAccepted={dropAcceptedSpy}
+          onDropRejected={dropRejectedSpy}
+          minSize={1112}
+        />
+      )
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files: images } })
+      expect(dropSpy.callCount).toEqual(1)
+      expect(dropSpy.firstCall.args[0]).toHaveLength(2)
+      expect(dropSpy.firstCall.args[1]).toHaveLength(0)
+      expect(dropAcceptedSpy.callCount).toEqual(1)
+      expect(dropAcceptedSpy.firstCall.args[0]).toHaveLength(2)
+      expect(dropRejectedSpy.callCount).toEqual(0)
+    })
+
+    it('accepts all dropped files and images when no size prop is specified', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          onDrop={dropSpy}
+          onDropAccepted={dropAcceptedSpy}
+          onDropRejected={dropRejectedSpy}
+        />
+      )
+      dropzone.simulate('drop', {
+        dataTransfer: { types: ['Files'], files: files.concat(images) }
+      })
+      expect(dropSpy.callCount).toEqual(1)
+      expect(dropSpy.firstCall.args[0]).toHaveLength(3)
+      expect(dropSpy.firstCall.args[1]).toHaveLength(0)
+      expect(dropAcceptedSpy.callCount).toEqual(1)
+      expect(dropAcceptedSpy.firstCall.args[0]).toHaveLength(3)
+      expect(dropRejectedSpy.callCount).toEqual(0)
+    })
+  })
 
   describe('preview', () => {
     it('should generate previews for non-images', () => {
       const dropSpy = spy()
       const dropzone = mount(<MagicDropzone onDrop={dropSpy} />)
-      dropzone.simulate('drop', { dataTransfer: { files } })
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files } })
       expect(Object.keys(dropSpy.firstCall.args[0][0])).toContain('preview')
       expect(dropSpy.firstCall.args[0][0].preview).toContain('data://file1.pdf')
     })
@@ -836,7 +849,7 @@ describe('MagicDropzone', () => {
     it('should generate previews for images', () => {
       const dropSpy = spy()
       const dropzone = mount(<MagicDropzone onDrop={dropSpy} />)
-      dropzone.simulate('drop', { dataTransfer: { files: images } })
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files: images } })
       expect(Object.keys(dropSpy.firstCall.args[0][0])).toContain('preview')
       expect(dropSpy.firstCall.args[0][0].preview).toContain('data://cats.gif')
     })
@@ -845,7 +858,7 @@ describe('MagicDropzone', () => {
       const dropSpy = spy()
       const dropzone = mount(<MagicDropzone onDrop={dropSpy} />)
 
-      dropzone.simulate('drop', { dataTransfer: { files: ['bad_val'] } })
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files: ['bad_val'] } })
 
       expect(Object.keys(dropSpy.firstCall.args[1][0])).not.toContain('preview')
     })
@@ -853,11 +866,118 @@ describe('MagicDropzone', () => {
     it('should not generate previews if disablePreview is true', () => {
       const dropSpy = spy()
       const dropzone = mount(<MagicDropzone disablePreview onDrop={dropSpy} />)
-      dropzone.simulate('drop', { dataTransfer: { files: images } })
-      dropzone.simulate('drop', { dataTransfer: { files } })
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files: images } })
+      dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files } })
       expect(dropSpy.callCount).toEqual(2)
       expect(Object.keys(dropSpy.firstCall.args[0][0])).not.toContain('preview')
       expect(Object.keys(dropSpy.lastCall.args[0][0])).not.toContain('preview')
+    })
+  })
+
+  describe('onDrop links', () => {
+    let dropSpy
+    let dropAcceptedSpy
+    let dropRejectedSpy
+
+    beforeEach(() => {
+      dropSpy = spy()
+      dropAcceptedSpy = spy()
+      dropRejectedSpy = spy()
+    })
+
+    afterEach(() => {
+      dropSpy.reset()
+      dropAcceptedSpy.reset()
+      dropRejectedSpy.reset()
+    })
+
+    it('should allow text/uri-list to be dropped', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          accept=".jpg"
+          onDrop={dropSpy}
+        />
+      )
+
+      dropzone.simulate('drop', {
+        dataTransfer: {
+          types: ['text/uri-list'],
+          getData: function() {
+            return testLinks.image1
+          }
+        }
+      })
+      const [accepted, rejected, links] = dropSpy.firstCall.args
+      expect(accepted.length).toEqual(0)
+      expect(rejected.length).toEqual(0)
+      expect(links.length).toEqual(1)
+    })
+
+    it('should allow for muliple links to be dropped', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          accept=".jpg, .json"
+          onDrop={dropSpy}
+        />
+      )
+
+      dropzone.simulate('drop', {
+        dataTransfer: {
+          types: ['text/uri-list'],
+          getData: function() {
+            return testLinks.html2
+          }
+        }
+      })
+      const [accepted, rejected, links] = dropSpy.firstCall.args
+      expect(accepted.length).toEqual(0)
+      expect(rejected.length).toEqual(0)
+      expect(links.length).toEqual(2)
+    })
+
+    it('should allow text/html to be dropped', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          accept=".jpg"
+          onDrop={dropSpy}
+        />
+      )
+
+      dropzone.simulate('drop', {
+        dataTransfer: {
+          types: ['text/html'],
+          getData: function() {
+            return testLinks.html
+          }
+        }
+      })
+      const [accepted, rejected, links] = dropSpy.firstCall.args
+      expect(accepted.length).toEqual(0)
+      expect(rejected.length).toEqual(0)
+      expect(links.length).toEqual(1)
+    })
+
+    it('should only allow links of valid extension', () => {
+      const dropzone = mount(
+        <MagicDropzone
+          accept=".jpg"
+          onDrop={dropSpy}
+          multiple={false}
+        />
+      )
+
+      dropzone.simulate('drop', {
+        dataTransfer: {
+          types: ['text/uri-list'],
+          getData: function() {
+            return testLinks.json
+          }
+        }
+      })
+      const [accepted, rejected, links] = dropSpy.firstCall.args
+      expect(accepted.length).toEqual(0)
+      expect(rejected.length).toEqual(0)
+      expect(links.length).toEqual(0)
     })
   })
 
@@ -961,53 +1081,53 @@ describe('MagicDropzone', () => {
         innerMagicDropzone = outerMagicDropzone.find(InnerMagicDropzone)
       })
 
-    //   it('does dragEnter on both dropzones', () => {
-    //     innerMagicDropzone.simulate('dragEnter', {
-    //       dataTransfer: { files: images }
-    //     })
-    //     expect(innerMagicDropzone).toHaveProp('isDragActive', true)
-    //     expect(innerMagicDropzone).toHaveProp('isDragReject', false)
-    //     expect(innerMagicDropzone.find(InnerDragAccepted).exists()).toEqual(
-    //       true
-    //     )
-    //     expect(innerMagicDropzone.find(InnerDragRejected).exists()).toEqual(
-    //       false
-    //     )
-    //   })
-    //
-    //   it('drops on the child dropzone', () => {
-    //     innerMagicDropzone.simulate('drop', {
-    //       dataTransfer: { files: files.concat(images) }
-    //     })
-    //   })
-    //
-    //   it('accepts the drop on the inner dropzone', () => {
-    //     expect(innerDropSpy.callCount).toEqual(1)
-    //     expect(innerDropSpy.firstCall.args[0]).toHaveLength(2)
-    //     expect(innerDropSpy.firstCall.args[1]).toHaveLength(1)
-    //     expect(innerDropAcceptedSpy.callCount).toEqual(1)
-    //     expect(innerDropAcceptedSpy.firstCall.args[0]).toHaveLength(2)
-    //     expect(innerDropRejectedSpy.callCount).toEqual(1)
-    //     expect(innerDropRejectedSpy.firstCall.args[0]).toHaveLength(1)
-    //     expect(innerMagicDropzone.find(InnerDragAccepted).exists()).toEqual(
-    //       false
-    //     )
-    //     expect(innerMagicDropzone.find(InnerDragRejected).exists()).toEqual(
-    //       false
-    //     )
-    //   })
-    //
-    //   it('also accepts the drop on the outer dropzone', () => {
-    //     expect(outerDropSpy.callCount).toEqual(1)
-    //     expect(outerDropSpy.firstCall.args[0]).toHaveLength(2)
-    //     expect(outerDropSpy.firstCall.args[1]).toHaveLength(1)
-    //     expect(outerDropAcceptedSpy.callCount).toEqual(1)
-    //     expect(outerDropAcceptedSpy.firstCall.args[0]).toHaveLength(2)
-    //     expect(outerDropRejectedSpy.callCount).toEqual(1)
-    //     expect(outerDropRejectedSpy.firstCall.args[0]).toHaveLength(1)
-    //     expect(innerMagicDropzone).toHaveProp('isDragActive', false)
-    //     expect(innerMagicDropzone).toHaveProp('isDragReject', false)
-    //   })
+      //   it('does dragEnter on both dropzones', () => {
+      //     innerMagicDropzone.simulate('dragEnter', {
+      //       dataTransfer: { files: images }
+      //     })
+      //     expect(innerMagicDropzone).toHaveProp('isDragActive', true)
+      //     expect(innerMagicDropzone).toHaveProp('isDragReject', false)
+      //     expect(innerMagicDropzone.find(InnerDragAccepted).exists()).toEqual(
+      //       true
+      //     )
+      //     expect(innerMagicDropzone.find(InnerDragRejected).exists()).toEqual(
+      //       false
+      //     )
+      //   })
+      //
+      //   it('drops on the child dropzone', () => {
+      //     innerMagicDropzone.simulate('drop', {
+      //       dataTransfer: { files: files.concat(images) }
+      //     })
+      //   })
+      //
+      //   it('accepts the drop on the inner dropzone', () => {
+      //     expect(innerDropSpy.callCount).toEqual(1)
+      //     expect(innerDropSpy.firstCall.args[0]).toHaveLength(2)
+      //     expect(innerDropSpy.firstCall.args[1]).toHaveLength(1)
+      //     expect(innerDropAcceptedSpy.callCount).toEqual(1)
+      //     expect(innerDropAcceptedSpy.firstCall.args[0]).toHaveLength(2)
+      //     expect(innerDropRejectedSpy.callCount).toEqual(1)
+      //     expect(innerDropRejectedSpy.firstCall.args[0]).toHaveLength(1)
+      //     expect(innerMagicDropzone.find(InnerDragAccepted).exists()).toEqual(
+      //       false
+      //     )
+      //     expect(innerMagicDropzone.find(InnerDragRejected).exists()).toEqual(
+      //       false
+      //     )
+      //   })
+      //
+      //   it('also accepts the drop on the outer dropzone', () => {
+      //     expect(outerDropSpy.callCount).toEqual(1)
+      //     expect(outerDropSpy.firstCall.args[0]).toHaveLength(2)
+      //     expect(outerDropSpy.firstCall.args[1]).toHaveLength(1)
+      //     expect(outerDropAcceptedSpy.callCount).toEqual(1)
+      //     expect(outerDropAcceptedSpy.firstCall.args[0]).toHaveLength(2)
+      //     expect(outerDropRejectedSpy.callCount).toEqual(1)
+      //     expect(outerDropRejectedSpy.firstCall.args[0]).toHaveLength(1)
+      //     expect(innerMagicDropzone).toHaveProp('isDragActive', false)
+      //     expect(innerMagicDropzone).toHaveProp('isDragReject', false)
+      //   })
     })
   })
 
@@ -1016,7 +1136,7 @@ describe('MagicDropzone', () => {
       const dropzone = mount(<MagicDropzone multiple={false} />)
 
       const fn = () =>
-        dropzone.simulate('drop', { dataTransfer: { files: [] } })
+        dropzone.simulate('drop', { dataTransfer: { types: ['Files'], files: [] } })
       expect(fn).not.toThrow()
     })
 
