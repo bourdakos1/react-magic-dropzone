@@ -10,12 +10,6 @@ import {
 } from './utils'
 
 class MagicDropzone extends Component {
-  state = {
-    draggedFiles: [],
-    acceptedFiles: [],
-    rejectedFiles: []
-  }
-
   isFileDialogActive = false
 
   componentDidMount() {
@@ -59,7 +53,6 @@ class MagicDropzone extends Component {
       // if we intercepted an event for our instance, let it propagate down to the instance's onDrop handler
       return
     }
-
     e.preventDefault()
     this.dragTargets = []
   }
@@ -71,6 +64,10 @@ class MagicDropzone extends Component {
     }
   }
 
+  // After much internal debate I decided to not distinguish that the files will
+  // be accepted. It is not widely supported and we only get mime-type info back
+  // Also, users won't be able to react fast enough to do anything if the
+  // overlay says WAIT THAT FILE ISN'T GOING TO WORK
   onDragEnter = e => {
     const { onDragEnter } = this.props
     e.preventDefault()
@@ -80,27 +77,7 @@ class MagicDropzone extends Component {
       this.dragTargets.push(e.target)
     }
 
-    this.setState({
-      isDragActive: true, // Do not rely on files for the drag state. It doesn't work in Safari.
-      draggedFiles: getDataTransferItems(e)
-    })
-
-    const dt = e.dataTransfer
-
-    // If dt.types doesn't contain 'Files' show the text input.
-    if (
-      !(
-        dt.types &&
-        // Sometimes we need to use "contains" instead of "indexOf"
-        (dt.types.indexOf
-          ? dt.types.indexOf('Files') !== -1
-          : dt.types.contains('Files'))
-      )
-    ) {
-      this.setState({ isLink: true })
-    } else {
-      this.setState({ isLink: false })
-    }
+    const draggedFiles = getDataTransferItems(e)
 
     if (onDragEnter) {
       onDragEnter.call(this, e)
@@ -135,13 +112,6 @@ class MagicDropzone extends Component {
       return
     }
 
-    // Clear dragging files state
-    this.setState({
-      isLink: false,
-      isDragActive: false,
-      draggedFiles: []
-    })
-
     if (onDragLeave) {
       onDragLeave.call(this, e)
     }
@@ -165,19 +135,8 @@ class MagicDropzone extends Component {
     // Stop default browser behavior
     e.preventDefault()
 
-
-    // TODO: We should pull this out into utils.
-    const dt = e.dataTransfer
-    // If dt.types doesn't contain 'Files'
-    if (
-      !(
-        dt.types &&
-        // Sometimes we need to use "contains" instead of "indexOf"
-        (dt.types.indexOf
-          ? dt.types.indexOf('Files') !== -1
-          : dt.types.contains('Files'))
-      )
-    ) {
+    // If there aren't any files, it might be a link
+    if (fileList === null) {
       this.onLink(e)
       return
     }
@@ -221,17 +180,6 @@ class MagicDropzone extends Component {
     if (acceptedFiles.length > 0 && onDropAccepted) {
       onDropAccepted.call(this, acceptedFiles, e)
     }
-
-    // Clear files value
-    this.draggedFiles = null
-
-    // Reset drag state
-    this.setState({
-      isDragActive: false,
-      draggedFiles: [],
-      acceptedFiles,
-      rejectedFiles
-    })
   }
 
   onClick = e => {
@@ -299,10 +247,6 @@ class MagicDropzone extends Component {
   onLink = e => {
     const { onDrop, accept } = this.props
 
-    this.setState({
-      isLink: false
-    })
-
     var extensionReg = /(\.[^.]+)(?=[,]|$)/gi
 
     var extensions = accept.match(extensionReg)
@@ -338,36 +282,12 @@ class MagicDropzone extends Component {
     }
   }
 
-  renderChildren = (children, isDragActive, isDragAccept, isDragReject) => {
-    if (typeof children === 'function') {
-      return children({
-        ...this.state,
-        isDragActive,
-        isDragAccept,
-        isDragReject
-      })
-    }
-    return children
-  }
-
   render() {
-    const {
-      accept,
-      children,
-      disabled,
-      multiple,
-    } = this.props
-
-    const { isDragActive, draggedFiles } = this.state
-
-    const filesCount = draggedFiles.length
-    const isMultipleAllowed = multiple || filesCount <= 1
-    const isDragAccept =
-      filesCount > 0 && allFilesAccepted(draggedFiles, accept)
-    const isDragReject = filesCount > 0 && (!isDragAccept || !isMultipleAllowed)
+    const { accept, children, disabled, multiple, ...restOfProps } = this.props
 
     return (
       <div
+        {...restOfProps}
         onClick={this.composeHandlers(this.onClick)}
         onDragStart={this.composeHandlers(this.onDragStart)}
         onDragEnter={this.composeHandlers(this.onDragEnter)}
@@ -377,12 +297,7 @@ class MagicDropzone extends Component {
         ref={this.setRef}
         aria-disabled={disabled}
       >
-        {this.renderChildren(
-          children,
-          isDragActive,
-          isDragAccept,
-          isDragReject
-        )}
+        {children}
         <input
           disabled={disabled}
           accept={accept}
