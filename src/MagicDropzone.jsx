@@ -135,8 +135,8 @@ class MagicDropzone extends Component {
     // Stop default browser behavior
     e.preventDefault()
 
-    // If there aren't any files, it might be a link
-    if (fileList === null) {
+    // If there aren't any files, it might be a link.
+    if (fileList.length === 0) {
       this.onLink(e)
       return
     }
@@ -247,9 +247,23 @@ class MagicDropzone extends Component {
   onLink = e => {
     const { onDrop, accept } = this.props
 
+    if (!accept) {
+      if (onDrop) {
+        onDrop([], [], [], e)
+      }
+      return;
+    }
+
     var extensionReg = /(\.[^.]+)(?=[,]|$)/gi
 
     var extensions = accept.match(extensionReg)
+
+    if (!extensions) {
+      if (onDrop) {
+        onDrop([], [], [], e)
+      }
+      return;
+    }
 
     var replace = '(https://|http://)((?!http).)*(' + extensions.join('|') + ')'
     var urlReg = new RegExp(replace, 'gi')

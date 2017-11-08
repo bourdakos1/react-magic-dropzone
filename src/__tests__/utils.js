@@ -45,7 +45,26 @@ describe('getDataTransferItems', () => {
         files: [{}]
       },
       dataTransfer: {
-        items: files
+        items: [
+          {
+            kind: 'file',
+            name: 'file1.pdf',
+            size: 1111,
+            type: 'application/pdf'
+          },
+          {
+            kind: 'file',
+            name: 'cats.gif',
+            size: 1234,
+            type: 'image/gif'
+          },
+          {
+            kind: 'file',
+            name: 'dogs.jpg',
+            size: 2345,
+            type: 'image/jpeg'
+          }
+        ]
       }
     }
     const res = getDataTransferItems(event)
