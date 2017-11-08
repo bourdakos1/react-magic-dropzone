@@ -251,7 +251,7 @@ class MagicDropzone extends Component {
       if (onDrop) {
         onDrop([], [], [], e)
       }
-      return;
+      return
     }
 
     var extensionReg = /(\.[^.]+)(?=[,]|$)/gi
@@ -262,7 +262,7 @@ class MagicDropzone extends Component {
       if (onDrop) {
         onDrop([], [], [], e)
       }
-      return;
+      return
     }
 
     var replace = '(https://|http://)((?!http).)*(' + extensions.join('|') + ')'
@@ -297,7 +297,26 @@ class MagicDropzone extends Component {
   }
 
   render() {
-    const { accept, children, disabled, multiple, ...restOfProps } = this.props
+    const {
+      accept,
+      children,
+      disabled,
+      multiple,
+      ...possibleUnused
+    } = this.props
+
+    const {
+      preventDropOnDocument,
+      disablePreview,
+      disableClick,
+      maxSize,
+      minSize,
+      inputProps,
+      onDropAccepted,
+      onDropRejected,
+      onFileDialogCancel,
+      ...restOfProps
+    } = possibleUnused
 
     return (
       <div
